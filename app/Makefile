@@ -11,7 +11,7 @@ install:
 	./gradlew clean install
 
 start-dist:
-	APP_ENV=production ./build/install/java-javalin-blog/bin/java-javalin-blog
+	APP_ENV=production ./build/install/java-project-72/bin/java-project-72
 
 start:
 	APP_ENV=development ./gradlew run
