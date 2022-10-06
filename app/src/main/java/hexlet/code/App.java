@@ -44,7 +44,7 @@ public class App {
     }
 
     private static int getPort() {
-        String port = System.getenv().getOrDefault("PORT", "5000");
+        String port = System.getenv().getOrDefault("PORT", "5001");
         return Integer.parseInt(port);
     }
 
