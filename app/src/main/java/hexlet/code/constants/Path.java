@@ -6,5 +6,10 @@ public final class Path {
 
     }
 
-    public static final String WELCOME = "";
+    public static final String WELCOME = "/";
+
+    public static class UrlPath {
+
+        public static final String URLS = "urls";
+    }
 }
