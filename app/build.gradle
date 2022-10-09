@@ -30,6 +30,7 @@ dependencies {
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.0.0'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-java8time:3.0.4.RELEASE'
     implementation 'com.h2database:h2:1.4.200'
+    implementation 'org.postgresql:postgresql:42.5.0'
     implementation 'commons-validator:commons-validator:1.7'
 
     implementation 'io.ebean:ebean:12.11.5'
