@@ -7,7 +7,7 @@ public interface UrlRepository<T, R> {
 
     void createUrl(T url);
 
-    int getUrlCountByName(String name);
+    boolean isExistsUrl(String host);
 
     Optional<T> getUrlById(R id);
 

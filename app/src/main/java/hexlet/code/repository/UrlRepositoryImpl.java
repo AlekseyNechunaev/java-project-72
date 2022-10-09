@@ -13,11 +13,12 @@ public class UrlRepositoryImpl implements UrlRepository<Url, Long> {
         url.save();
     }
 
+
     @Override
-    public int getUrlCountByName(String name) {
+    public boolean isExistsUrl(String host) {
         return new QUrl()
-                .name.eq(name)
-                .findCount();
+                .name.contains(host)
+                .exists();
     }
 
     @Override
@@ -30,6 +31,10 @@ public class UrlRepositoryImpl implements UrlRepository<Url, Long> {
     @Override
     public List<Url> getPagedUrls(int limit, int offset) {
         return new QUrl()
-                .findList();
+                .setFirstRow(offset)
+                .setMaxRows(limit)
+                .orderBy()
+                .id.asc()
+                .findPagedList().getList();
     }
 }
