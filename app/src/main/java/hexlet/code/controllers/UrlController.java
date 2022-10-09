@@ -5,7 +5,6 @@ import hexlet.code.domain.Url;
 import hexlet.code.repository.UrlRepositoryImpl;
 import io.javalin.http.Handler;
 import io.javalin.http.HttpCode;
-import org.apache.commons.validator.routines.UrlValidator;
 
 public final class UrlController {
 
@@ -13,8 +12,8 @@ public final class UrlController {
 
     public static Handler createUrl = ctx -> {
         String urlName = ctx.formParamAsClass("url", String.class).getOrDefault(null);
-        UrlValidator validator = new UrlValidator();
-        if (!validator.isValid(urlName)) {
+        Url url = new Url(urlName);
+        if (!url.isValid()) {
             ctx.status(HttpCode.BAD_REQUEST);
             ctx.sessionAttribute("flash", "Некорректный URL");
             ctx.sessionAttribute("flashType", "danger");
@@ -29,7 +28,6 @@ public final class UrlController {
             ctx.redirect(Path.WELCOME);
             return;
         }
-        Url url = new Url(urlName);
         urlRepository.createUrl(url);
         ctx.sessionAttribute("flash", "Страница успешно сохранена");
         ctx.sessionAttribute("flashType", "success");

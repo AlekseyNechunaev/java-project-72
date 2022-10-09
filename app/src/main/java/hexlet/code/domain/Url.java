@@ -3,6 +3,7 @@ package hexlet.code.domain;
 import io.ebean.Model;
 import io.ebean.annotation.NotNull;
 import io.ebean.annotation.WhenCreated;
+import org.apache.commons.validator.routines.UrlValidator;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -34,5 +35,10 @@ public final class Url extends Model {
 
     public Instant getCreatedAt() {
         return createdAt;
+    }
+
+
+    public boolean isValid() {
+        return new UrlValidator().isValid(this.name);
     }
 }
