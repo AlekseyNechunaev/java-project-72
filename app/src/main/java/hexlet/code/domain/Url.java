@@ -5,11 +5,14 @@ import io.ebean.annotation.NotNull;
 import io.ebean.annotation.WhenCreated;
 import org.apache.commons.validator.routines.UrlValidator;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Instant;
+import java.util.List;
 
 @Entity
 public final class Url extends Model {
@@ -22,6 +25,9 @@ public final class Url extends Model {
 
     @WhenCreated
     private Instant createdAt;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    List<UrlCheck> checks;
 
     public Url(String name) {
         this.name = name;
@@ -39,6 +45,9 @@ public final class Url extends Model {
         return createdAt;
     }
 
+    public List<UrlCheck> getChecks() {
+        return checks;
+    }
 
     public boolean isValid() {
         return new UrlValidator().isValid(this.name);
