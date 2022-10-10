@@ -12,6 +12,7 @@ public class CheckRepositoryImpl implements CheckRepository<UrlCheck, Long> {
     public List<UrlCheck> getChecksListByUrlId(Long id) {
         return new QUrlCheck()
                 .url.id.eq(id)
+                .orderBy().checkDate.desc()
                 .findList();
     }
 
