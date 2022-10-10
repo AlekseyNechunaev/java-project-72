@@ -2,10 +2,12 @@ package hexlet.code.constants;
 
 public enum Message {
 
-    SUCCESS("Страница успешно сохранена"),
+    SUCCESS_CREATE_URL("Страница успешно сохранена"),
     URL_ALREADY_EXISTS("Страница уже существует"),
 
-    INCORRECT_URL("Некорректный URL");
+    INCORRECT_URL("Некорректный URL"),
+
+    SUCCESS_CHECK("Страница успешно проверена");
 
     private final String message;
 

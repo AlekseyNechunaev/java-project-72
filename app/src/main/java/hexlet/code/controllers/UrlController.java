@@ -39,7 +39,7 @@ public final class UrlController {
         }
         url.toUrlFormat();
         urlRepository.createUrl(url);
-        ctx.sessionAttribute("flash", Message.SUCCESS);
+        ctx.sessionAttribute("flash", Message.SUCCESS_CREATE_URL);
         ctx.sessionAttribute("flashType", FlashType.SUCCESS);
         ctx.redirect(Path.UrlPath.URLS);
     };
@@ -66,6 +66,11 @@ public final class UrlController {
     public static Handler checkUrl = ctx -> {
         Long id = ctx.queryParamAsClass("id", Long.class).getOrDefault(null);
         Url url = urlRepository.getUrlById(id).orElseThrow(NotFoundResponse::new);
+        UrlCheck urlCheck = url.runCheck();
+        checkRepository.createCheck(urlCheck);
+        ctx.attribute("flash", Message.SUCCESS_CHECK);
+        ctx.attribute("flashType", FlashType.SUCCESS);
+        ctx.redirect(Path.UrlPath.URLS + "/" + id);
     };
 
 }

@@ -14,4 +14,9 @@ public class CheckRepositoryImpl implements CheckRepository<UrlCheck, Long> {
                 .url.id.eq(id)
                 .findList();
     }
+
+    @Override
+    public void createCheck(UrlCheck check) {
+        check.save();
+    }
 }
