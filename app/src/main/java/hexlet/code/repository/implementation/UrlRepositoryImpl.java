@@ -31,7 +31,7 @@ public class UrlRepositoryImpl implements UrlRepository<Url, Long> {
     }
 
     @Override
-    public List<Url> getPagedUrlsWithLastCheck(int limit, int offset) {
+    public List<Url> getPagedUrlsWithChecks(int limit, int offset) {
         QUrl url = QUrl.alias();
         QUrlCheck urlCheck = QUrlCheck.alias();
         return new QUrl()
@@ -40,7 +40,6 @@ public class UrlRepositoryImpl implements UrlRepository<Url, Long> {
                 .setMaxRows(limit)
                 .orderBy().id.asc()
                 .checks.fetch(urlCheck.status, urlCheck.checkDate)
-                .setFirstRow(1)
                 .orderBy().checks.checkDate.asc()
                 .findPagedList().getList();
     }

@@ -30,13 +30,14 @@ public class UrlCheck extends Model {
     private Instant checkDate;
 
     @ManyToOne
-    private Url url;
+    private final Url url;
 
-    public UrlCheck(int status, String title, String h1, String description) {
+    public UrlCheck(int status, String title, String h1, String description, Url url) {
         this.status = status;
         this.title = title;
         this.h1 = h1;
         this.description = description;
+        this.url = url;
     }
 
     public long getId() {

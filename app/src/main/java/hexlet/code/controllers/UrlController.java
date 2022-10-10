@@ -48,14 +48,14 @@ public final class UrlController {
         int page = ctx.queryParamAsClass("page", Integer.class).getOrDefault(1);
         int limit = 10;
         int offset = page == 1 ? 0 : (page - 1) * 10;
-        List<Url> urls = urlRepository.getPagedUrlsWithLastCheck(limit, offset);
+        List<Url> urls = urlRepository.getPagedUrlsWithChecks(limit, offset);
         ctx.attribute("page", page);
         ctx.attribute("urls", urls);
         ctx.render("urls/index.html");
     };
 
     public static Handler showCurrentUrl = ctx -> {
-        Long id = ctx.queryParamAsClass("id", Long.class).getOrDefault(null);
+        Long id = ctx.pathParamAsClass("id", Long.class).getOrDefault(null);
         Url url = urlRepository.getUrlById(id).orElseThrow(NotFoundResponse::new);
         List<UrlCheck> checks = checkRepository.getChecksListByUrlId(url.getId());
         ctx.attribute("url", url);
@@ -64,13 +64,19 @@ public final class UrlController {
     };
 
     public static Handler checkUrl = ctx -> {
-        Long id = ctx.queryParamAsClass("id", Long.class).getOrDefault(null);
+        Long id = ctx.pathParamAsClass("id", Long.class).getOrDefault(null);
         Url url = urlRepository.getUrlById(id).orElseThrow(NotFoundResponse::new);
+        if (!url.isReachable()) {
+            ctx.sessionAttribute("flash", Message.INCORRECT_URL);
+            ctx.sessionAttribute("flashType", FlashType.DANGER);
+            ctx.redirect("/" + Path.UrlPath.URLS + "/" + id);
+            return;
+        }
         UrlCheck urlCheck = url.runCheck();
         checkRepository.createCheck(urlCheck);
-        ctx.attribute("flash", Message.SUCCESS_CHECK);
-        ctx.attribute("flashType", FlashType.SUCCESS);
-        ctx.redirect(Path.UrlPath.URLS + "/" + id);
+        ctx.sessionAttribute("flash", Message.SUCCESS_CHECK);
+        ctx.sessionAttribute("flashType", FlashType.SUCCESS);
+        ctx.redirect("/" + Path.UrlPath.URLS + "/" + id);
     };
 
 }

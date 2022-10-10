@@ -15,6 +15,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Instant;
@@ -65,15 +67,26 @@ public final class Url extends Model {
         this.name = url.getProtocol() + "://" + url.getHost() + port;
     }
 
+    public boolean isReachable() {
+        HttpURLConnection connection;
+        try {
+            connection = (HttpURLConnection) new URL(this.name).openConnection();
+            connection.connect();
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
     public UrlCheck runCheck() {
         HttpResponse<String> response = Unirest.get(this.name).asString();
         Document doc = Jsoup.parse(response.getBody());
         int status = response.getStatus();
         String title = doc.title();
-        Element h1Element = doc.select("h1").first();
+        Element h1Element = doc.selectFirst("h1");
         Elements metaDescription = doc.select("meta[property=og:description]");
         String h1ElementText = h1Element == null ? null : h1Element.text();
-        String description = metaDescription.attr("content");
-        return new UrlCheck(status, title, h1ElementText, description);
+        String description = metaDescription.isEmpty() ? null : metaDescription.attr("content");
+        return new UrlCheck(status, title, h1ElementText, description, this);
     }
 }
