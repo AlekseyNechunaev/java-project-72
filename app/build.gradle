@@ -42,7 +42,7 @@ dependencies {
     implementation 'io.ebean:ebean-annotation:7.3'
     annotationProcessor 'io.ebean:querybean-generator:12.11.5'
 
-a    implementation 'com.konghq:unirest-java:3.13.0'
+    implementation 'com.konghq:unirest-java:3.13.0'
     implementation 'org.jsoup:jsoup:1.15.3'
 
     implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.5'
