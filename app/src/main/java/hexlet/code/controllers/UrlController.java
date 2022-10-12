@@ -31,13 +31,13 @@ public final class UrlController {
         }
         String urlHost = new URL(url.getName()).getHost();
         if (urlRepository.isExistsUrl(urlHost)) {
-            ctx.status(HttpCode.CONFLICT);
+            ctx.status(HttpCode.BAD_REQUEST);
             ctx.sessionAttribute("flash", Message.URL_ALREADY_EXISTS);
             ctx.sessionAttribute("flashType", FlashType.WARNING);
             ctx.redirect(Path.WELCOME);
             return;
         }
-        url.toUrlFormat();
+        url.normalize();
         urlRepository.createUrl(url);
         ctx.sessionAttribute("flash", Message.SUCCESS_CREATE_URL);
         ctx.sessionAttribute("flashType", FlashType.SUCCESS);
@@ -46,10 +46,13 @@ public final class UrlController {
 
     public static Handler showAll = ctx -> {
         int page = ctx.queryParamAsClass("page", Integer.class).getOrDefault(1);
+        int urlsCount = urlRepository.getCountUrls();
+        int lastPage = urlsCount % 10 == 0 ? urlsCount / 10 : (urlsCount / 10) + 1;
         int limit = 10;
         int offset = page == 1 ? 0 : (page - 1) * 10;
         List<Url> urls = urlRepository.getPagedUrlsWithChecks(limit, offset);
         ctx.attribute("page", page);
+        ctx.attribute("lastPage", lastPage);
         ctx.attribute("urls", urls);
         ctx.render("urls/index.html");
     };
@@ -57,7 +60,7 @@ public final class UrlController {
     public static Handler showCurrentUrl = ctx -> {
         Long id = ctx.pathParamAsClass("id", Long.class).getOrDefault(null);
         Url url = urlRepository.getUrlById(id).orElseThrow(NotFoundResponse::new);
-        List<UrlCheck> checks = checkRepository.getChecksListByUrlId(url.getId());
+        List<UrlCheck> checks = checkRepository.getChecksByUrlId(url.getId());
         ctx.attribute("url", url);
         ctx.attribute("checks", checks);
         ctx.render("urls/show.html");
@@ -67,6 +70,7 @@ public final class UrlController {
         Long id = ctx.pathParamAsClass("id", Long.class).getOrDefault(null);
         Url url = urlRepository.getUrlById(id).orElseThrow(NotFoundResponse::new);
         if (!url.isReachable()) {
+            ctx.status(HttpCode.BAD_REQUEST);
             ctx.sessionAttribute("flash", Message.INCORRECT_URL);
             ctx.sessionAttribute("flashType", FlashType.DANGER);
             ctx.redirect("/" + Path.UrlPath.URLS + "/" + id);

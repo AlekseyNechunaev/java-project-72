@@ -12,4 +12,6 @@ public interface UrlRepository<T, R> {
     Optional<T> getUrlById(R id);
 
     List<T> getPagedUrlsWithChecks(int limit, int offset);
+
+    int getCountUrls();
 }

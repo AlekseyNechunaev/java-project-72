@@ -43,4 +43,10 @@ public class UrlRepositoryImpl implements UrlRepository<Url, Long> {
                 .orderBy().checks.checkDate.asc()
                 .findPagedList().getList();
     }
+
+    @Override
+    public int getCountUrls() {
+        return new QUrl()
+                .findCount();
+    }
 }

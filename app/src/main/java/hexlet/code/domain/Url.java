@@ -61,7 +61,7 @@ public final class Url extends Model {
         return new UrlValidator().isValid(this.name);
     }
 
-    public void toUrlFormat() throws MalformedURLException {
+    public void normalize() throws MalformedURLException {
         URL url = new URL(this.name);
         String port = url.getPort() == -1 ? "" : ":" + url.getPort();
         this.name = url.getProtocol() + "://" + url.getHost() + port;

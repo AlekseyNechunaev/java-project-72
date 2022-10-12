@@ -43,10 +43,10 @@
             <tr th:each="check: ${checks}" th:object="${check}">
                 <td th:text="*{id}"></td>
                 <td th:text="*{status}"></td>
-                <td th:text="*{title}"></td>
-                <td th:text="*{h1}"></td>
-                <td th:text="*{description}"></td>
-                <td th:text="*{checkDate}"></td>
+                <td th:text="*{#strings.abbreviate(title, 60)}"></td>
+                <td th:text="*{#strings.abbreviate(h1, 60)}"></td>
+                <td th:text="*{#strings.abbreviate(description, 60)}"></td>
+                <td th:text="*{#temporals.format(checkDate, 'dd/MM/yyyy HH:mm')}"></td>
             </tr>
             </tbody>
         </table>

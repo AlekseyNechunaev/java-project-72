@@ -9,7 +9,7 @@ import java.util.List;
 public class CheckRepositoryImpl implements CheckRepository<UrlCheck, Long> {
 
     @Override
-    public List<UrlCheck> getChecksListByUrlId(Long id) {
+    public List<UrlCheck> getChecksByUrlId(Long id) {
         return new QUrlCheck()
                 .url.id.eq(id)
                 .orderBy().checkDate.desc()
