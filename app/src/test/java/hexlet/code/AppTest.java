@@ -159,7 +159,7 @@ public class AppTest {
                     .field("url", name)
                     .asEmpty();
             assertThat(responsePost.getStatus()).isEqualTo(302);
-            assertThat(responsePost.getHeaders().getFirst("Location")).contains("urls");
+            assertThat(responsePost.getHeaders().getFirst("Location")).contains("/urls");
             HttpResponse<String> responseGet = Unirest
                     .get(baseUrl)
                     .asString();

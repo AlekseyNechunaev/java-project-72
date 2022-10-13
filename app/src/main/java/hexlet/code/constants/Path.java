@@ -10,8 +10,8 @@ public final class Path {
 
     public static class UrlPath {
 
-        public static final String URLS = "urls";
+        public static final String URLS = "/urls";
         public static final String ID = "{id}";
-        public static final String CHECKS = "checks";
+        public static final String CHECKS = "/checks";
     }
 }

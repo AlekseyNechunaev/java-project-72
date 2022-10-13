@@ -73,14 +73,14 @@ public final class UrlController {
             ctx.status(HttpCode.BAD_REQUEST);
             ctx.sessionAttribute("flash", Message.INCORRECT_URL);
             ctx.sessionAttribute("flashType", FlashType.DANGER);
-            ctx.redirect("/" + Path.UrlPath.URLS + "/" + id);
+            ctx.redirect(Path.UrlPath.URLS + "/" + id);
             return;
         }
         UrlCheck urlCheck = url.runCheck();
         checkRepository.createCheck(urlCheck);
         ctx.sessionAttribute("flash", Message.SUCCESS_CHECK);
         ctx.sessionAttribute("flashType", FlashType.SUCCESS);
-        ctx.redirect("/" + Path.UrlPath.URLS + "/" + id);
+        ctx.redirect(Path.UrlPath.URLS + "/" + id);
     };
 
 }
