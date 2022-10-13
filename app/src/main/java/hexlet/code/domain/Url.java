@@ -22,6 +22,8 @@ import java.net.URL;
 import java.time.Instant;
 import java.util.List;
 
+import static org.apache.commons.validator.routines.UrlValidator.ALLOW_LOCAL_URLS;
+
 @Entity
 public final class Url extends Model {
 
@@ -58,7 +60,7 @@ public final class Url extends Model {
     }
 
     public boolean isValid() {
-        return new UrlValidator().isValid(this.name);
+        return new UrlValidator(ALLOW_LOCAL_URLS).isValid(this.name);
     }
 
     public void normalize() throws MalformedURLException {
