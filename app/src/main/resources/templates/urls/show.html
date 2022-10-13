@@ -42,7 +42,7 @@
             <tbody>
             <tr th:each="check: ${checks}" th:object="${check}">
                 <td th:text="*{id}"></td>
-                <td th:text="*{status}"></td>
+                <td th:text="*{statusCode}"></td>
                 <td th:text="*{#strings.abbreviate(title, 60)}"></td>
                 <td th:text="*{#strings.abbreviate(h1, 60)}"></td>
                 <td th:text="*{#strings.abbreviate(description, 60)}"></td>
