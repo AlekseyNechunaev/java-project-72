@@ -11,12 +11,12 @@ import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
-import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.AfterAll;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -164,7 +164,7 @@ public class AppTest {
                     .get(baseUrl)
                     .asString();
             assertThat(responseGet.getStatus()).isEqualTo(200);
-            assertThat(responseGet.getBody()).contains("Страница успешно сохранена");
+            assertThat(responseGet.getBody()).contains("Страница успешно добавлена");
             Url url = new QUrl()
                     .name.eq(normalizeName)
                     .findOne();
