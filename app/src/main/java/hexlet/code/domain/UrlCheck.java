@@ -27,7 +27,7 @@ public class UrlCheck extends Model {
     private final String description;
 
     @WhenCreated
-    private Instant checkDate;
+    private Instant createdAt;
 
     @ManyToOne
     private final Url url;
@@ -60,8 +60,8 @@ public class UrlCheck extends Model {
         return description;
     }
 
-    public Instant getCheckDate() {
-        return checkDate;
+    public Instant getCreatedAt() {
+        return createdAt;
     }
 
     public Url getUrl() {
