@@ -2,3 +2,4 @@
 /.idea/
 /build/
 /database.mv.db
+/database.trace.db

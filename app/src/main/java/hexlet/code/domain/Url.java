@@ -84,7 +84,7 @@ public final class Url extends Model {
         int status = response.getStatus();
         String title = doc.title();
         Element h1Element = doc.selectFirst("h1");
-        Elements metaDescription = doc.select("meta[property=og:description]");
+        Elements metaDescription = doc.select("meta[name=description]");
         String h1ElementText = h1Element == null ? null : h1Element.text();
         String description = metaDescription.isEmpty() ? null : metaDescription.attr("content");
         return new UrlCheck(status, title, h1ElementText, description, this);

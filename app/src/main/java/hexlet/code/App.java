@@ -32,7 +32,7 @@ public class App {
         app.start(getPort());
     }
 
-    private static Javalin getApp() {
+    public static Javalin getApp() {
         Javalin app = Javalin.create(config -> {
             if (!isProduction()) {
                 config.enableDevLogging();
@@ -44,7 +44,7 @@ public class App {
         return app;
     }
 
-    private static int getPort() {
+    public static int getPort() {
         String port = System.getenv().getOrDefault("PORT", "5001");
         return Integer.parseInt(port);
     }
