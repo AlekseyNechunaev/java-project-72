@@ -6,7 +6,7 @@ import hexlet.code.repository.CheckRepository;
 
 import java.util.List;
 
-public class CheckRepositoryImpl implements CheckRepository<UrlCheck, Long> {
+public final class CheckRepositoryImpl implements CheckRepository<UrlCheck, Long> {
 
     @Override
     public List<UrlCheck> getChecksByUrlId(Long id) {

@@ -8,7 +8,7 @@ import hexlet.code.repository.UrlRepository;
 import java.util.List;
 import java.util.Optional;
 
-public class UrlRepositoryImpl implements UrlRepository<Url, Long> {
+public final class UrlRepositoryImpl implements UrlRepository<Url, Long> {
 
     @Override
     public void createUrl(Url url) {
