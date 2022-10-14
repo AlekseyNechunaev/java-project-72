@@ -11,12 +11,7 @@ import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -36,8 +31,6 @@ public final class AppTest {
     private static final MockWebServer SERVER = new MockWebServer();
     private static final Path MOCK_FILE_PATH = Paths.get("src/test/resources/mock/mock.html");
 
-    private static Url mockUrlName;
-
     @BeforeAll
     static void initApp() throws IOException {
         app = App.getApp();
@@ -49,11 +42,6 @@ public final class AppTest {
         String contentMock = Files.readString(MOCK_FILE_PATH, StandardCharsets.US_ASCII);
         SERVER.enqueue(new MockResponse().setBody(contentMock));
         SERVER.start();
-        String mockHost = SERVER.url("/").toString();
-        mockUrlName = new Url(mockHost);
-        mockUrlName.normalize();
-        mockUrlName.save();
-
     }
 
 
@@ -179,7 +167,7 @@ public final class AppTest {
                     .field("url", unknownHostUrl)
                     .asEmpty();
             assertThat(responsePost.getStatus()).isEqualTo(302);
-            assertThat(responsePost.getHeaders().getFirst("Location")).contains("urls");
+            assertThat(responsePost.getHeaders().getFirst("Location")).contains("/urls");
             Url url = new QUrl()
                     .name.eq(unknownHostUrl)
                     .findOne();
@@ -205,12 +193,23 @@ public final class AppTest {
             String exceptedH1 = "Example H1";
             String exceptedTitle = "Example title";
             String exceptedDescription = "Example description";
+            String mockUrlName = SERVER.url("/").toString().replaceFirst(".$", "");
+            HttpResponse<?> responsePost = Unirest
+                    .post(baseUrl + "/urls")
+                    .field("url", mockUrlName)
+                    .asEmpty();
+            assertThat(responsePost.getStatus()).isEqualTo(302);
+            assertThat(responsePost.getHeaders().getFirst("Location")).contains("/urls");
+            Url url = new QUrl()
+                    .name.eq(mockUrlName)
+                    .findOne();
+            assertThat(url).isNotNull();
             HttpResponse<?> responsePostCheck = Unirest
-                    .post(baseUrl + "/urls/" + mockUrlName.getId() + "/checks")
+                    .post(baseUrl + "/urls/" + url.getId() + "/checks")
                     .asEmpty();
             assertThat(responsePostCheck.getStatus()).isEqualTo(302);
             HttpResponse<String> responseGet = Unirest
-                    .get(baseUrl + "/urls/" + mockUrlName.getId())
+                    .get(baseUrl + "/urls/" + url.getId())
                     .asString();
             assertThat(responseGet.getStatus()).isEqualTo(200);
             assertThat(responseGet.getBody()).contains("Страница успешно проверена")
@@ -218,7 +217,7 @@ public final class AppTest {
                     .contains(exceptedH1)
                     .contains(exceptedDescription);
             List<UrlCheck> checks = new QUrlCheck()
-                    .url.id.eq(mockUrlName.getId())
+                    .url.id.eq(url.getId())
                     .findList();
             assertThat(checks).hasSize(1);
         }

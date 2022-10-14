@@ -7,6 +7,7 @@ import hexlet.code.domain.Url;
 import hexlet.code.domain.UrlCheck;
 import hexlet.code.repository.implementation.CheckRepositoryImpl;
 import hexlet.code.repository.implementation.UrlRepositoryImpl;
+import hexlet.code.utils.UrlUtils;
 import io.javalin.http.Handler;
 import io.javalin.http.HttpCode;
 import io.javalin.http.NotFoundResponse;
@@ -21,15 +22,14 @@ public final class UrlController {
 
     public static Handler createUrl = ctx -> {
         String urlName = ctx.formParamAsClass("url", String.class).getOrDefault(null);
-        Url url = new Url(urlName);
-        if (!url.isValid()) {
+        if (!UrlUtils.isValid(urlName)) {
             ctx.status(HttpCode.BAD_REQUEST);
             ctx.sessionAttribute("flash", Message.INCORRECT_URL);
             ctx.sessionAttribute("flashType", FlashType.DANGER);
             ctx.redirect(Path.WELCOME);
             return;
         }
-        String urlHost = new URL(url.getName()).getHost();
+        String urlHost = new URL(urlName).getHost();
         if (urlRepository.isExistsUrl(urlHost)) {
             ctx.status(HttpCode.BAD_REQUEST);
             ctx.sessionAttribute("flash", Message.URL_ALREADY_EXISTS);
@@ -37,7 +37,8 @@ public final class UrlController {
             ctx.redirect(Path.WELCOME);
             return;
         }
-        url.normalize();
+        String normalizeUrl = UrlUtils.normalize(urlName);
+        Url url = new Url(normalizeUrl);
         urlRepository.createUrl(url);
         ctx.sessionAttribute("flash", Message.SUCCESS_CREATE_URL);
         ctx.sessionAttribute("flashType", FlashType.SUCCESS);
@@ -69,14 +70,14 @@ public final class UrlController {
     public static Handler checkUrl = ctx -> {
         Long id = ctx.pathParamAsClass("id", Long.class).getOrDefault(null);
         Url url = urlRepository.getUrlById(id).orElseThrow(NotFoundResponse::new);
-        if (!url.isReachable()) {
+        if (!UrlUtils.isReachable(url)) {
             ctx.status(HttpCode.BAD_REQUEST);
             ctx.sessionAttribute("flash", Message.INCORRECT_URL);
             ctx.sessionAttribute("flashType", FlashType.DANGER);
             ctx.redirect(Path.UrlPath.URLS + "/" + id);
             return;
         }
-        UrlCheck urlCheck = url.runCheck();
+        UrlCheck urlCheck = UrlUtils.runCheck(url);
         checkRepository.createCheck(urlCheck);
         ctx.sessionAttribute("flash", Message.SUCCESS_CHECK);
         ctx.sessionAttribute("flashType", FlashType.SUCCESS);

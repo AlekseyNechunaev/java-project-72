@@ -40,7 +40,7 @@ public final class UrlRepositoryImpl implements UrlRepository<Url, Long> {
                 .setMaxRows(limit)
                 .orderBy().id.asc()
                 .checks.fetch(urlCheck.statusCode, urlCheck.createdAt)
-                .orderBy().checks.createdAt.asc()
+                .orderBy().checks.createdAt.desc()
                 .findPagedList().getList();
     }
 
